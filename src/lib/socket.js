@@ -3,10 +3,17 @@ import http from "http";
 import express from "express";
 
 const app = express();
-const io = new Server("https://real-time-chat-app-2vg5.vercel.app", {
-  cors: true,
+const server = http.createServer(app);
+const io = new Server(server, {
+   cors: {
+    origin: [
+    "https://real-time-chat-app-2vg5.vercel.app",
+  
+  ],
+  methods: ["GET", "POST"],
+    credentials: true,
+  },
 });
-   
 
 export function getReceiverSocketId(userId) {
   return userSocketMap[userId];
@@ -44,4 +51,4 @@ io.on("connection", (socket) => {
   });
 });
 
-export { io, app };
+export { io, server, app };
